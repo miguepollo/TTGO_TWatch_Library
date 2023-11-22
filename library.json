@@ -49,10 +49,6 @@
       "version": "^2.5.23"
     },
     {
-      "name": "lvgl",
-      "version": "^8.3.7"
-    },
-    {
       "name": "XPowersLib",
       "version": "https://github.com/lewisxhe/XPowersLib.git#7da0aab811002dee2e113977f98f118e85e294ef"
     },
