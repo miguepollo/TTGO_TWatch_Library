@@ -162,4 +162,6 @@
 #define BOARD_MIC_DATA              (47)
 #define BOARD_MIC_CLOCK             (44)
 
+#define MOTOR_PIN2                  (4)
+
 #endif
