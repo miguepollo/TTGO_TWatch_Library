@@ -153,13 +153,13 @@ public:
     void setSleepMode(SleepMode_t mode);
 
     void sleep(uint32_t second = 0) ;
-private:
+
 
 
     void log_println(const char *message);
     bool beginPower();
     void beginCore();
-
+private:
 
 
     uint8_t brightness;
