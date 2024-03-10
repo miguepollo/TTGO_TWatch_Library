@@ -126,7 +126,7 @@ bool LilyGoLib::begin(Stream *stream)
     setBrightness(50);
 
     log_println("Init Touch");
-    res = TouchDrvFT6X36::init(Wire1, BOARD_TOUCH_SDA, BOARD_TOUCH_SCL);
+    res = TouchDrvFT6X36::begin(Wire1, BOARD_TOUCH_SDA, BOARD_TOUCH_SCL);
     if (!res) {
         log_println("Failed to find FT6X36 - check your wiring!");
     } else {
