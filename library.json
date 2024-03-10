@@ -33,7 +33,7 @@
   "dependencies": [
     {
       "name": "ESP8266Audio",
-      "version": "^1.9.7"
+      "version": "https://github.com/miguepollo/ESP8266Audio.git"
     },
     {
       "name": "IRremoteESP8266",
