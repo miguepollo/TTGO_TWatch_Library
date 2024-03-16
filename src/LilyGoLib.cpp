@@ -419,10 +419,10 @@ bool LilyGoLib::beginPower()
 
 
     // Set the time of pressing the button to turn off
-    setPowerKeyPressOffTime(XPOWERS_POWEROFF_4S);
+    setPowerKeyPressOffTime(XPOWERS_POWEROFF_6S);
 
     // Set the button power-on press time
-    setPowerKeyPressOnTime(XPOWERS_POWERON_128MS);
+    setPowerKeyPressOnTime(XPOWERS_POWERON_512MS);
 
 
     // It is necessary to disable the detection function of the TS pin on the board
@@ -588,21 +588,4 @@ void LilyGoLib::sleep(uint32_t second)
 
 
 LilyGoLib watch;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
