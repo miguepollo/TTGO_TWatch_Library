@@ -130,7 +130,6 @@ bool LilyGoLib::begin(Stream *stream)
     }
 
     fillScreen(TFT_BLACK);
-    drawString("Hola", 120, 120);
 
     setBrightness(50);
 
