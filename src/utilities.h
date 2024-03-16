@@ -50,5 +50,3 @@
 #define BOARD_MIC_CLOCK             (44)
 //Motor
 #define MOTOR_PIN2                  (4)
-
-#endif
