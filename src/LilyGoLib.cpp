@@ -86,14 +86,16 @@ bool LilyGoLib::begin(Stream *stream)
     pinMode(BOARD_TOUCH_INT, INPUT);
     Wire.begin(BOARD_I2C_SDA, BOARD_I2C_SCL);
     if (stream) {
+        log_println("************************* STREAM");
         deviceScan(&Wire, stream);
+        log_println("************************* FIN_STREAM");
     }
 
     Wire1.begin(BOARD_TOUCH_SDA, BOARD_TOUCH_SCL);
     if (stream) {
-        log_println("************************* STREAM");
+        log_println("************************* STREAM2222222222");
         deviceScan(&Wire1, stream);
-        log_println("************************* FIN_STREAM");
+        log_println("************************* FIN_STREAM22222222222");
     }
 
     log_println("Init PMU");
@@ -128,7 +130,7 @@ bool LilyGoLib::begin(Stream *stream)
     }
 
     fillScreen(TFT_BLACK);
-    drawString("Hello T-Watch", 120, 120);
+    drawString("Hola", 120, 120);
 
     setBrightness(50);
 
