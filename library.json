@@ -54,7 +54,7 @@
     },
     {
       "name": "SensorLib",
-      "version": "https://github.com/miguepollo/SensorLib.git"
+      "version": "0.1.4"
     }
   ],
   "examples": ["examples/*/*.ino"],
