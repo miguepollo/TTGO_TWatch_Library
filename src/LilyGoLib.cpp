@@ -14,31 +14,43 @@ SPIClass radioBus =  SPIClass(HSPI);
 #endif
 
 
+void LilyGoLib::log_println(const char *message)
+{
+    /*
+    if (stream) {
+        stream->println(message);
+    }
+    */
+   log_printf(message);
+}
+
 void deviceScan(TwoWire *_port, Stream *stream)
 {
+    log_printf("222222222222222222222222222");
+
     uint8_t err, addr;
     int nDevices = 0;
     for (addr = 1; addr < 127; addr++) {
         _port->beginTransmission(addr);
         err = _port->endTransmission();
         if (err == 0) {
-            stream->print("I2C device found at address 0x");
+            log_printf("I2C device found at address 0x");
             if (addr < 16)
-                stream->print("0");
-            stream->print(addr, HEX);
-            stream->println(" !");
+                log_printf("0");
+//            log_printf((char *)addr, HEX);
+            log_printf(" !");
             nDevices++;
         } else if (err == 4) {
-            stream->print("Unknow error at address 0x");
+            log_printf("Unknow error at address 0x");
             if (addr < 16)
-                stream->print("0");
-            stream->println(addr, HEX);
+                log_printf("0");
+//            log_printf((char *)addr, HEX);
         }
     }
     if (nDevices == 0)
-        stream->println("No I2C devices found\n");
+        log_printf("No I2C devices found\n");
     else
-        stream->println("Done\n");
+        log_printf("Done\n");
 }
 
 
@@ -60,25 +72,18 @@ LilyGoLib::~LilyGoLib()
 
 }
 
-void LilyGoLib::log_println(const char *message)
-{
-    if (stream) {
-        stream->println(message);
-    }
-}
-
-
 bool LilyGoLib::begin(Stream *stream)
 {
     bool res;
 
-#ifdef LILYGO_LIB_DEBUG
-    this->stream = &Serial;
-#else
-    this->stream = stream;
-#endif
-    pinMode(BOARD_TOUCH_INT, INPUT);
+    if (stream) {
+        this->stream = stream;
+    } else {
+        this->stream = &Serial;
+        stream = &Serial;
+    }
 
+    pinMode(BOARD_TOUCH_INT, INPUT);
     Wire.begin(BOARD_I2C_SDA, BOARD_I2C_SCL);
     if (stream) {
         deviceScan(&Wire, stream);
@@ -86,7 +91,9 @@ bool LilyGoLib::begin(Stream *stream)
 
     Wire1.begin(BOARD_TOUCH_SDA, BOARD_TOUCH_SCL);
     if (stream) {
+        log_println("************************* STREAM");
         deviceScan(&Wire1, stream);
+        log_println("************************* FIN_STREAM");
     }
 
     log_println("Init PMU");
@@ -579,7 +586,6 @@ void LilyGoLib::sleep(uint32_t second)
 
 
 LilyGoLib watch;
-
 
 
 
