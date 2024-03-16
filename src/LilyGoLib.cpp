@@ -153,7 +153,7 @@ bool LilyGoLib::begin(Stream *stream)
     }
 
     log_println("Init PCF8563 RTC");
-    res = SensorPCF8563::init(Wire);
+    res = SensorPCF8563::begin(Wire);
     if (!res) {
         log_println("Failed to find PCF8563 - check your wiring!");
     } else {
