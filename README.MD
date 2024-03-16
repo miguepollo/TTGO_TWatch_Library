@@ -3,6 +3,8 @@
 
 [![PlatformIO CI](https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library/actions/workflows/platformio.yml/badge.svg)](https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library/actions/workflows/platformio.yml)
 [![Arduino_CI](https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library/actions/workflows/arduino_ci.yml/badge.svg?branch=t-watch-s3)](https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library/actions/workflows/arduino_ci.yml)
+![Last commit](https://img.shields.io/github/last-commit/miguepollo/TTGO-TWatch-Library?style=for-the-badge)
+![activity](https://img.shields.io/github/commit-activity/m/miguepollo/TTGO-TWatch-Library?style=for-the-badge)
 
 **English | [中文](README_CN.MD)**
 
