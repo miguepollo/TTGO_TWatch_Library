@@ -3,6 +3,9 @@
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
 #endif
+#ifdef LILYGO_WATCH_LVGL
+#include <Ticker.h>
+#endif
 #if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
     void lvgl_whirling(uint8_t rot)
     {
@@ -126,3 +129,96 @@ public:
     }
 
 #endif  /*LILYGO_WATCH_LVGL*/
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2020_S3)||defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+    void disableTouchIRQ()
+    {
+        detachInterrupt(TOUCH_INT);
+    }
+
+    void enableTouchIRQ()
+    {
+        /*
+            Interrupt polling is only compatible with 2020-V1, 2020-V2 ,2019 , others are not currently adapted
+        */
+        pinMode(TOUCH_INT, INPUT);
+        attachInterrupt(TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
+    }
+#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
+
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+        /*
+            Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
+        */
+        pinMode(TOUCH_INT, INPUT);
+        attachInterrupt(TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
+#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
+
+    
+
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) ||  defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+    /*
+    Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
+    */
+    static void TOUCH_IRQ_HANDLE(void)
+    {
+        portBASE_TYPE task_woken;
+        if (_ttgo->_tpEvent) {
+            xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
+            if ( task_woken == pdTRUE ) {
+                portYIELD_FROM_ISR();
+            }
+        }
+    }
+#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
+#if  defined(LILYGO_WATCH_LVGL)
+    Ticker *tickTicker = nullptr;
+#endif  /*LILYGO_WATCH_LVGL*/
+#if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
+    lv_disp_drv_t disp_drv;
+#endif  /*LILYGO_WATCH_LVGL & LILYGO_WATCH_HAS_DISPLAY*/
+#if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
+    static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
+    {
+        uint32_t size = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) ;
+        // Use DMA for transfer
+#if defined(ENABLE_LVGL_FLUSH_DMA)
+        _ttgo->tft->startWrite();
+        _ttgo->tft->setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+        _ttgo->tft->pushPixelsDMA(( uint16_t *)color_p, size);
+        _ttgo->tft->endWrite();
+#else
+        _ttgo->tft->setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+        _ttgo->tft->pushColors(( uint16_t *)color_p, size, false);
+#endif
+        lv_disp_flush_ready(disp_drv);
+    }
+
+#if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_TOUCH)
+    static bool touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
+    {
+
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+        /*
+            Interrupt polling is only compatible with 2020-V1, 2020-V2,2019, others are not currently adapted
+        */
+        static int16_t x, y;
+        if (xEventGroupGetBits(_ttgo->_tpEvent) & TOUCH_IRQ_BIT) {
+            xEventGroupClearBits(_ttgo->_tpEvent, TOUCH_IRQ_BIT);
+            data->state = watch.getTouch(x, y) ?  LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
+            data->point.x = x;
+            data->point.y = y;
+        } else {
+            data->state = LV_INDEV_STATE_REL;
+            data->point.x = x;
+            data->point.y = y;
+        }
+#else
+        data->state = watch.getTouch(data->point.x, data->point.y) ?  LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
+#endif /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
+
+        return false; /*Return false because no moare to be read*/
+    }
+
+#endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
+
+#endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
