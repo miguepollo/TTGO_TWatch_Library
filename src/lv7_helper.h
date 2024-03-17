@@ -1,4 +1,6 @@
+#include "lvgl.h"
 
-lvgl_begin();
-startLvglTick();
-stopLvglTick();
+bool lvgl_begin();
+void startLvglTick();
+void stopLvglTick();
+void lvgl_whirling(uint8_t rot);

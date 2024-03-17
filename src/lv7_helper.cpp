@@ -1,3 +1,8 @@
+#include "lv7_helper.h"
+#include "lvgl.h"
+#ifdef LILYGO_WATCH_LVGL
+#include <Ticker.h>
+#endif
 #if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
     void lvgl_whirling(uint8_t rot)
     {
@@ -7,8 +12,15 @@
         lv_disp_drv_update(lv_disp_get_default(), &disp_drv);
     }
 
+#ifdef LILYGO_WATCH_LVGL_FS
+#include "libraries/lv_fs_if/lv_fs_if.h"
+#endif
 
-private:
+#ifdef LILYGO_WATCH_LVGL_DECODER
+#include "libraries/lv_lib_png/lv_png.h"
+#endif
+
+
 #ifdef  TWATCH_USE_PSRAM_ALLOC_LVGL
     lv_color_t *buf1 = nullptr;
 #ifdef  TWATCH_LVGL_DOUBLE_BUFFER
@@ -77,7 +89,7 @@ public:
 #endif  /*LILYGO_WATCH_HAS_TOUCH*/
 
 
-#if defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)
+#if defined(LILYGO_WATCH_2020_S3) 
 #define LILYGO_WATCH_LVGL_FS_SPIFFS
 #endif
 
