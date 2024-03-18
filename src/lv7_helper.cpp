@@ -1,5 +1,6 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
+#include "focaltech.h"
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
 #endif
