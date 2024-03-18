@@ -1,4 +1,5 @@
 #include "lvgl.h"
+#include "focaltech.h"
 
 bool lvgl_begin();
 void startLvglTick();
