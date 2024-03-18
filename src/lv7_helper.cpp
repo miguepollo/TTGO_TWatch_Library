@@ -1,6 +1,7 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
 #include "focaltech.h"
+#include <Arduino.h>
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
 #endif
