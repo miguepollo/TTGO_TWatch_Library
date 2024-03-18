@@ -2,7 +2,7 @@
 
 #include "lvgl.h"
 #include "focaltech.h"
-
+#include <Arduino.h>
 public:
 bool lvgl_begin();
 void startLvglTick();
