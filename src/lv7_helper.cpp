@@ -2,6 +2,7 @@
 #include "lvgl.h"
 #include "focaltech.h"
 #include <Arduino.h>
+#include "LilyGoLib.h"  
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
 #endif
@@ -11,19 +12,13 @@
 #if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
     void lvgl_whirling(uint8_t rot)
     {
-        tft->setRotation(rot);
-        disp_drv.hor_res = tft->width();
-        disp_drv.ver_res = tft->height();
+        tft.setRotation(rot);
+        disp_drv.hor_res = tft.width();
+        disp_drv.ver_res = tft.height();
         lv_disp_drv_update(lv_disp_get_default(), &disp_drv);
     }
 
-#ifdef LILYGO_WATCH_LVGL_FS
-#include "libraries/lv_fs_if/lv_fs_if.h"
-#endif
 
-#ifdef LILYGO_WATCH_LVGL_DECODER
-#include "libraries/lv_lib_png/lv_png.h"
-#endif
 
 
 #ifdef  TWATCH_USE_PSRAM_ALLOC_LVGL
@@ -33,7 +28,6 @@
 #endif
 #endif
 
-public:
     bool lvgl_begin()
     {
         if (tft == nullptr) {
@@ -189,8 +183,8 @@ public:
         _ttgo->tft->pushPixelsDMA(( uint16_t *)color_p, size);
         _ttgo->tft->endWrite();
 #else
-        _ttgo->tft->setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
-        _ttgo->tft->pushColors(( uint16_t *)color_p, size, false);
+        tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+        tft.pushColors(( uint16_t *)color_p, size, false);
 #endif
         lv_disp_flush_ready(disp_drv);
     }
@@ -199,7 +193,7 @@ public:
     static bool touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
     {
 
-#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2020_S3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
         /*
             Interrupt polling is only compatible with 2020-V1, 2020-V2,2019, others are not currently adapted
         */
@@ -225,4 +219,3 @@ public:
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
 
-private:

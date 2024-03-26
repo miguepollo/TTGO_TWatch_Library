@@ -1,8 +1,11 @@
-#pragma once
+// File: lv7_helper.h
 
 #include "lvgl.h"
 #include "focaltech.h"
 #include <Arduino.h>
+
+class lvgl_helper
+{
 public:
 bool lvgl_begin();
 void startLvglTick();
@@ -12,4 +15,7 @@ static void TOUCH_IRQ_HANDLE(void);
 static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p);
 void disableTouchIRQ();
 void enableTouchIRQ();
+};
 private:
+
+extern lvgl_helper lvgl;
