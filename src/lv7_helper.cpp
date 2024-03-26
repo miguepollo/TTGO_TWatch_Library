@@ -10,6 +10,9 @@
 #include <Ticker.h>
 #endif
 #if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
+    lv_disp_drv_t disp_drv;
+#endif  /*LILYGO_WATCH_LVGL & LILYGO_WATCH_HAS_DISPLAY*/
+#if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
     void lvgl_whirling(uint8_t rot)
     {
         tft.setRotation(rot);
@@ -72,8 +75,8 @@
 #endif
 
 
-        disp_drv.hor_res = tft->width();
-        disp_drv.ver_res = tft->height();
+        disp_drv.hor_res = tft.width();
+        disp_drv.ver_res = tft.height();
         disp_drv.flush_cb = disp_flush;
         /*Set a display buffer*/
         disp_drv.buffer = &disp_buf;
@@ -158,7 +161,7 @@
     static void TOUCH_IRQ_HANDLE(void)
     {
         portBASE_TYPE task_woken;
-        if (_ttgo->_tpEvent) {
+        if (ttgo->_tpEvent) {
             xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
             if ( task_woken == pdTRUE ) {
                 portYIELD_FROM_ISR();
@@ -169,9 +172,7 @@
 #if  defined(LILYGO_WATCH_LVGL)
     Ticker *tickTicker = nullptr;
 #endif  /*LILYGO_WATCH_LVGL*/
-#if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
-    lv_disp_drv_t disp_drv;
-#endif  /*LILYGO_WATCH_LVGL & LILYGO_WATCH_HAS_DISPLAY*/
+
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
     static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
     {
