@@ -1,5 +1,6 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
+
 #include "focaltech.h"
 #include <Arduino.h>
 #include "LilyGoLib.h"
@@ -123,9 +124,7 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 
 
 
-#ifdef LILYGO_WATCH_LVGL_DECODER
-        lv_png_init();
-#endif
+
 
 #endif  /*LILYGO_WATCH_LVGL_FS*/
 
