@@ -2,7 +2,9 @@
 #include "lvgl.h"
 #include "focaltech.h"
 #include <Arduino.h>
-#include "LilyGoLib.h"  
+#include "LilyGoLib.h"
+TFT_eSPI tft = TFT_eSPI();
+TFT_eSprite sprite = TFT_eSprite(&tft);
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
 #endif
@@ -13,6 +15,23 @@
     lv_disp_drv_t disp_drv;
 #endif  /*LILYGO_WATCH_LVGL & LILYGO_WATCH_HAS_DISPLAY*/
 #if  defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
+
+    static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
+    {
+        uint32_t size = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) ;
+        // Use DMA for transfer
+#if defined(ENABLE_LVGL_FLUSH_DMA)
+        tft.startWrite();
+        tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+        tft.pushPixelsDMA(( uint16_t *)color_p, size);
+        tft.endWrite();
+#else
+        tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+        tft.pushColors(( uint16_t *)color_p, size, false);
+#endif
+        lv_disp_flush_ready(disp_drv);
+    }
+
     void lvgl_whirling(uint8_t rot)
     {
         tft.setRotation(rot);
@@ -91,7 +110,7 @@
 #endif  /*LILYGO_WATCH_HAS_TOUCH*/
 
 
-#if defined(LILYGO_WATCH_2020_S3) 
+#if defined(LILYGO_WATCH_2020_S3)
 #define LILYGO_WATCH_LVGL_FS_SPIFFS
 #endif
 
@@ -102,7 +121,7 @@
         //TODO:
 #endif  /*LILYGO_WATCH_LVGL_FS_SPIFFS*/
 
-        lv_fs_if_init();
+
 
 #ifdef LILYGO_WATCH_LVGL_DECODER
         lv_png_init();
@@ -131,7 +150,7 @@
 #if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2020_S3)||defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
     void disableTouchIRQ()
     {
-        detachInterrupt(TOUCH_INT);
+        detachInterrupt(BOARD_TOUCH_INT);
     }
 
     void enableTouchIRQ()
@@ -139,8 +158,8 @@
         /*
             Interrupt polling is only compatible with 2020-V1, 2020-V2 ,2019 , others are not currently adapted
         */
-        pinMode(TOUCH_INT, INPUT);
-        attachInterrupt(TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
+        pinMode(BOARD_TOUCH_INT, INPUT);
+        attachInterrupt(BOARD_TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
     }
 #endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
@@ -148,11 +167,11 @@
         /*
             Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
         */
-        pinMode(TOUCH_INT, INPUT);
-        attachInterrupt(TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
+        pinMode(BOARD_TOUCH_INT, INPUT);
+        attachInterrupt(BOARD_TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
 #endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
-    
+
 
 #if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) ||  defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
     /*
@@ -161,7 +180,7 @@
     static void TOUCH_IRQ_HANDLE(void)
     {
         portBASE_TYPE task_woken;
-        if (ttgo->_tpEvent) {
+        if (_ttgo->_tpEvent) {
             xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
             if ( task_woken == pdTRUE ) {
                 portYIELD_FROM_ISR();
@@ -174,21 +193,7 @@
 #endif  /*LILYGO_WATCH_LVGL*/
 
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
-    static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
-    {
-        uint32_t size = (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1) ;
-        // Use DMA for transfer
-#if defined(ENABLE_LVGL_FLUSH_DMA)
-        _ttgo->tft->startWrite();
-        _ttgo->tft->setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
-        _ttgo->tft->pushPixelsDMA(( uint16_t *)color_p, size);
-        _ttgo->tft->endWrite();
-#else
-        tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
-        tft.pushColors(( uint16_t *)color_p, size, false);
-#endif
-        lv_disp_flush_ready(disp_drv);
-    }
+
 
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_TOUCH)
     static bool touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
@@ -213,7 +218,7 @@
         data->state = watch.getTouch(data->point.x, data->point.y) ?  LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
 #endif /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
-        return false; /*Return false because no moare to be read*/
+        return false; /*Return false because no more to be read*/
     }
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
