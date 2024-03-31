@@ -1,6 +1,7 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
 #include <Ticker.h>
+#include <event_groups.h>
 #if  defined(LILYGO_WATCH_LVGL)
     Ticker *tickTicker = nullptr;
 #endif  /*LILYGO_WATCH_LVGL*/
