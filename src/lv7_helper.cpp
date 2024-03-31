@@ -1,7 +1,6 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
 #include <Ticker.h>
-#include <event_groups.h>
 #if  defined(LILYGO_WATCH_LVGL)
     Ticker *tickTicker = nullptr;
 #endif  /*LILYGO_WATCH_LVGL*/
@@ -10,16 +9,7 @@
     /*
     Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
     */
-    static void TOUCH_IRQ_HANDLE(void)
-    {
-        portBASE_TYPE task_woken;
-        if (_ttgo->_tpEvent) {
-            xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
-            if ( task_woken == pdTRUE ) {
-                portYIELD_FROM_ISR();
-            }
-        }
-    }
+
 #endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
 #include "focaltech.h"
@@ -171,29 +161,10 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
         detachInterrupt(BOARD_TOUCH_INT);
     }
 
-    void enableTouchIRQ()
-    {
-        /*
-            Interrupt polling is only compatible with 2020-V1, 2020-V2 ,2019 , others are not currently adapted
-        */
-        pinMode(BOARD_TOUCH_INT, INPUT);
-        attachInterrupt(BOARD_TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
-    }
-#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
-
-#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
-        /*
-            Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
-        */
-       void setupTouch(){
-        pinMode(BOARD_TOUCH_INT, INPUT);
-        attachInterrupt(BOARD_TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
-       }
-#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
 
 
-
+#endif
 
 
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
