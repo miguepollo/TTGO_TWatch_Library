@@ -125,13 +125,14 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 
 
 #endif  /*LILYGO_WATCH_LVGL_FS*/
+    tickTicker = new Ticker();
     void startLvglTick();
     {
         tickTicker->attach_ms(5, []() {
             lv_tick_inc(5);
         });
     }
-        tickTicker = new Ticker();
+
         startLvglTick();
         return true;
     }
@@ -223,4 +224,5 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
+
 
