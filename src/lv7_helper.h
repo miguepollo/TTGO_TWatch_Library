@@ -8,6 +8,7 @@ class lvgl_7helperForS3{
 
 public:
     bool lvgl_begin();
+    void setupTouch();
     void startLvglTick();
     void stopLvglTick();
     void lvgl_whirling(uint8_t rot);

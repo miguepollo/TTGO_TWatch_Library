@@ -166,8 +166,10 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
         /*
             Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
         */
+       void setupTouch(){
         pinMode(BOARD_TOUCH_INT, INPUT);
         attachInterrupt(BOARD_TOUCH_INT, TOUCH_IRQ_HANDLE, FALLING);
+       }
 #endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
 
