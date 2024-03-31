@@ -53,9 +53,7 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 
     bool lvgl_begin()
     {
-        if (tft == nullptr) {
-            return false;
-        }
+
         lv_init();
         lv_indev_drv_t indev_drv;
         lv_disp_drv_init(&disp_drv);
@@ -127,18 +125,18 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 
 
 #endif  /*LILYGO_WATCH_LVGL_FS*/
-
-        tickTicker = new Ticker();
-        startLvglTick();
-        return true;
-    }
-
-    void startLvglTick()
+    void startLvglTick();
     {
         tickTicker->attach_ms(5, []() {
             lv_tick_inc(5);
         });
     }
+        tickTicker = new Ticker();
+        startLvglTick();
+        return true;
+    }
+
+
 
     void stopLvglTick()
     {
