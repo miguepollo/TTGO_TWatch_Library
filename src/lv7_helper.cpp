@@ -1,6 +1,10 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
 
+#if  defined(LILYGO_WATCH_LVGL)
+    Ticker *tickTicker = nullptr;
+#endif  /*LILYGO_WATCH_LVGL*/
+
 #include "focaltech.h"
 #include <Arduino.h>
 #include "LilyGoLib.h"
@@ -188,9 +192,7 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
         }
     }
 #endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
-#if  defined(LILYGO_WATCH_LVGL)
-    Ticker *tickTicker = nullptr;
-#endif  /*LILYGO_WATCH_LVGL*/
+
 
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
 
@@ -224,5 +226,4 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
-
 
