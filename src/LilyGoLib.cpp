@@ -8,7 +8,7 @@
  */
 
 #include "LilyGoLib.h"
-
+extern SensorPCF8563 rtc;  //
 #ifdef USING_TWATCH_S3
 SPIClass radioBus =  SPIClass(HSPI);
 #endif
@@ -153,7 +153,7 @@ bool LilyGoLib::begin(Stream *stream)
     }
 
     log_println("Init PCF8563 RTC");
-    res = SensorPCF8563::begin(Wire);
+    res = rtc.init(Wire);
     if (!res) {
         log_println("Failed to find PCF8563 - check your wiring!");
     } else {
