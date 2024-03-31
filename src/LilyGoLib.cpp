@@ -454,11 +454,11 @@ bool LilyGoLib::beginPower()
     );
 
     // Set the precharge charging current
-    setPrechargeCurr(XPOWERS_AXP2101_PRECHARGE_50MA);
+    setPrechargeCurr(XPOWERS_AXP2101_PRECHARGE_75MA);
     // Set constant current charge current limit
-    setChargerConstantCurr(XPOWERS_AXP2101_CHG_CUR_100MA);
+    setChargerConstantCurr(XPOWERS_AXP2101_CHG_CUR_150MA);
     // Set stop charging termination current
-    setChargerTerminationCurr(XPOWERS_AXP2101_CHG_ITERM_25MA);
+    setChargerTerminationCurr(XPOWERS_AXP2101_CHG_ITERM_50MA);
 
     // Set charge cut-off voltage
     setChargeTargetVoltage(XPOWERS_AXP2101_CHG_VOL_4V35);
