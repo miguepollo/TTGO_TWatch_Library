@@ -1,9 +1,25 @@
 #include "lv7_helper.h"
 #include "lvgl.h"
-
+#include <Ticker.h>
 #if  defined(LILYGO_WATCH_LVGL)
     Ticker *tickTicker = nullptr;
 #endif  /*LILYGO_WATCH_LVGL*/
+
+#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) ||  defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
+    /*
+    Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
+    */
+    static void TOUCH_IRQ_HANDLE(void)
+    {
+        portBASE_TYPE task_woken;
+        if (_ttgo->_tpEvent) {
+            xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
+            if ( task_woken == pdTRUE ) {
+                portYIELD_FROM_ISR();
+            }
+        }
+    }
+#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
 
 #include "focaltech.h"
 #include <Arduino.h>
@@ -11,7 +27,6 @@
 TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite sprite = TFT_eSprite(&tft);
 #ifdef LILYGO_WATCH_LVGL
-#include <Ticker.h>
 #endif
 #ifdef LILYGO_WATCH_LVGL
 #include <Ticker.h>
@@ -177,21 +192,7 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 
 
 
-#if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) ||  defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3)|| defined(LILYGO_WATCH_2019_WITH_TOUCH)) &&  defined(LILYGO_WATCH_LVGL)
-    /*
-    Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not currently adapted
-    */
-    static void TOUCH_IRQ_HANDLE(void)
-    {
-        portBASE_TYPE task_woken;
-        if (_ttgo->_tpEvent) {
-            xEventGroupSetBitsFromISR(_ttgo->_tpEvent, TOUCH_IRQ_BIT, &task_woken);
-            if ( task_woken == pdTRUE ) {
-                portYIELD_FROM_ISR();
-            }
-        }
-    }
-#endif  /*LILYGO_WATCH_2020_V1 & LILYGO_WATCH_2020_V2*/
+
 
 
 #if defined(LILYGO_WATCH_LVGL) && defined(LILYGO_WATCH_HAS_DISPLAY)
@@ -226,3 +227,4 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
+
