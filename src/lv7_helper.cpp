@@ -226,4 +226,3 @@ TFT_eSprite sprite = TFT_eSprite(&tft);
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_TOUCH*/
 
 #endif /*LILYGO_WATCH_LVGL , LILYGO_WATCH_HAS_DISPLAY*/
-
