@@ -8,7 +8,7 @@
  */
 
 #include "LilyGoLib.h"
-extern SensorPCF8563 rtc;  //
+SensorPCF8563 rtc;  //
 #ifdef USING_TWATCH_S3
 SPIClass radioBus =  SPIClass(HSPI);
 #endif
