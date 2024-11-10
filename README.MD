@@ -1,4 +1,4 @@
-<h1 align = "center">🌟LilyGO T-Watch🌟</h1>
+<h1 align = "center">Warning! this library onlyworks for my-ttgo-watch</h1>
 
 **English | [中文](docs/details_cn.md)**
 
