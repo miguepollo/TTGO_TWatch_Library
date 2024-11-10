@@ -12,7 +12,7 @@ Interrupt polling is only compatible with 2020-V1, 2020-V2, others are not curre
 #include "focaltech.h"
 #include <Arduino.h>
 #include "LilyGoLib.h"
-TFT_eSPI tft = TFT_eSPI();
+
 TFT_eSprite sprite = TFT_eSprite(&tft);
 
 #ifdef LILYGO_WATCH_LVGL
