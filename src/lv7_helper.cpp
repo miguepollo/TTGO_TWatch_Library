@@ -2,7 +2,9 @@
 #include "lvgl.h"
 #include <config.h>
 #include "config.h"  // Asegúrate de incluir los archivos necesarios
+#include "TFT_eSPI.h"
 extern TTGOClass watch;  // Declara watch como variable externa
+TFT_eSPI tft = TFT_eSPI(); // Inicialización del TFT
 
 #if (defined(LILYGO_WATCH_2020_V1) || defined(LILYGO_WATCH_2020_V2) || defined(LILYGO_WATCH_2020_S3) || defined(LILYGO_WATCH_2020_V3) || defined(LILYGO_WATCH_2019_WITH_TOUCH)) && defined(LILYGO_WATCH_LVGL)
 /*
